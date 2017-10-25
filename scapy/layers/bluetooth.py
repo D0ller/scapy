@@ -290,7 +290,12 @@ class ATT_Handle_Value_Notification(Packet):
     name = "Handle Value Notification"
     fields_desc = [ XLEShortField("handle", 0),
                     StrField("value", ""), ]
-
+    
+class ATT_Prepare_Write_Request(Packet):
+    name = "Prepare Write Request"
+    fields_desc = [ XLEShortField("gatt_handle", 0),
+                    XLEShortField("offset", 0),
+                    StrField("value", ""), ]
 
 class SM_Hdr(Packet):
     name = "SM header"
@@ -746,6 +751,7 @@ bind_layers( ATT_Hdr,       ATT_Read_By_Group_Type_Response, opcode=0x11)
 bind_layers( ATT_Hdr,       ATT_Write_Request, opcode=0x12)
 bind_layers( ATT_Hdr,       ATT_Write_Response, opcode=0x13)
 bind_layers( ATT_Hdr,       ATT_Write_Command, opcode=0x52)
+bind_layers( ATT_Hdr,       ATT_Prepare_Write_Request, opcode=0x16)
 bind_layers( ATT_Hdr,       ATT_Handle_Value_Notification, opcode=0x1b)
 bind_layers( L2CAP_Hdr,     SM_Hdr,            cid=6)
 bind_layers( SM_Hdr,        SM_Pairing_Request, sm_command=1)
