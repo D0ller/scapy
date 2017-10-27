@@ -278,7 +278,7 @@ class ATT_Write_Request(Packet):
                     StrField("data", ""), ]
 
 class ATT_Write_Command(Packet):
-    name = "Write Request"
+    name = "Write Command"
     fields_desc = [ XLEShortField("gatt_handle", 0),
                     StrField("data", ""), ]
 
