@@ -554,6 +554,8 @@ class HCI_Cmd_LE_Connection_Update(Packet):
                     LEShortField("min_ce", 0),
                     LEShortField("max_ce", 0xffff), ]
 
+  
+
 class HCI_Cmd_LE_Read_Buffer_Size(Packet):
     name = "LE Read Buffer Size"
 
@@ -577,9 +579,16 @@ class HCI_Cmd_LE_Set_Advertising_Data(Packet):
     fields_desc = [ FieldLenField("len", None, length_of="data", fmt="B"),
                     StrLenField("data", "", length_from=lambda pkt:pkt.len), ]
 
+class HCI_Cmd_LE_Set_Scan_Response_Data(Packet):
+    name = "LE Set Scan Response Data"
+    fields_desc = [ FieldLenField("len", None, length_of="data", fmt="B"),
+                    StrLenField("data", "", length_from=lambda pkt:pkt.len), ]     
+  
+    
 class HCI_Cmd_LE_Set_Advertise_Enable(Packet):
     name = "LE Set Advertise Enable"
     fields_desc = [ ByteField("enable", 0) ]
+    
 
 class HCI_Cmd_LE_Start_Encryption_Request(Packet):
     name = "LE Start Encryption"
@@ -704,6 +713,7 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_Disconnect, opcode=0x406)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Create_Connection, opcode=0x200d)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Create_Connection_Cancel, opcode=0x200e)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Connection_Update, opcode=0x2013)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Scan_Response_Data, opcode=0x2009)
 
 
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Start_Encryption_Request, opcode=0x2019)
