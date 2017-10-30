@@ -289,29 +289,29 @@ class ATT_Write_Response(Packet):
 class ATT_Handle_Value_Notification(Packet):
     name = "Handle Value Notification"
     fields_desc = [ XLEShortField("handle", 0),
-                    StrField("value", ""), ]
-    
+                    StrField("value", ""), ]    
+
 class ATT_Prepare_Write_Request(Packet):
     name = "Prepare Write Request"
     fields_desc = [ XLEShortField("gatt_handle", 0),
                     XLEShortField("offset", 0),
                     StrField("value", ""), ]
-    
+
 class ATT_Prepare_Write_Response(Packet):
     name = "Prepare Write Response"
     fields_desc = [ XLEShortField("gatt_handle", 0),
                     XLEShortField("offset", 0),
                     StrField("value", ""), ]
-    
+
 class ATT_Execute_Write_Request(Packet):
     name = "Execute Write Request"
     fields_desc = [ ByteEnumField("flags", 1, {0:"Cancel", 1:"Execute"}),]
-    
+
 class ATT_Execute_Write_Response(Packet):
     name = "Execute Write Response"
     fields_desc = [ ]
-       
-    
+
+
 class SM_Hdr(Packet):
     name = "SM header"
     fields_desc = [ ByteField("sm_command", None) ]
@@ -554,8 +554,6 @@ class HCI_Cmd_LE_Connection_Update(Packet):
                     LEShortField("min_ce", 0),
                     LEShortField("max_ce", 0xffff), ]
 
-  
-
 class HCI_Cmd_LE_Read_Buffer_Size(Packet):
     name = "LE Read Buffer Size"
 
@@ -584,11 +582,9 @@ class HCI_Cmd_LE_Set_Scan_Response_Data(Packet):
     fields_desc = [ FieldLenField("len", None, length_of="data", fmt="B"),
                     StrLenField("data", "", length_from=lambda pkt:pkt.len), ]     
   
-    
 class HCI_Cmd_LE_Set_Advertise_Enable(Packet):
     name = "LE Set Advertise Enable"
     fields_desc = [ ByteField("enable", 0) ]
-    
 
 class HCI_Cmd_LE_Start_Encryption_Request(Packet):
     name = "LE Start Encryption"
@@ -635,7 +631,6 @@ class HCI_Event_Command_Complete(Packet):
 class HCI_Cmd_Complete_Read_BD_Addr(Packet):
     name = "Read BD Addr"
     fields_desc = [ LEMACField("addr", None), ]
-
 
 
 class HCI_Event_Command_Status(Packet):
@@ -706,6 +701,7 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Buffer_Size, opcode=0x2002)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Random_Address, opcode=0x2005)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Advertising_Parameters, opcode=0x2006)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Advertising_Data, opcode=0x2008)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Scan_Response_Data, opcode=0x2009)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Advertise_Enable, opcode=0x200a)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Scan_Parameters, opcode=0x200b)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Scan_Enable, opcode=0x200c)
@@ -713,13 +709,25 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_Disconnect, opcode=0x406)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Create_Connection, opcode=0x200d)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Create_Connection_Cancel, opcode=0x200e)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Connection_Update, opcode=0x2013)
-bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Scan_Response_Data, opcode=0x2009)
 
 
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Start_Encryption_Request, opcode=0x2019)
 
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Reply, opcode=0x201a)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply, opcode=0x201b)
+
+#bind_layers( HCI_Command_Hdr, HCI_LE_Read_Local_Supported_Features, opcode=0x2003)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Read_White_List_Size, opcode=0x200f)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Clear_White_List, opcode=0x2010)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Add_Device_To_White_List, opcode=0x2011)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Remove_Device_From_White_List, opcode=0x2012)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Set_Host_Channel_Classification, opcode=0x2014)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Read_Channel_Map, opcode=0x2015)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Read_Remote_Used_Features, opcode=0x2016)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Encrypt, opcode=0x2017)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Rand, opcode=0x2018)
+#bind_layers( HCI_Command_Hdr, HCI_LE_Read_Supported_States, opcode=0x201c)
 
 bind_layers( HCI_Event_Hdr, HCI_Event_Disconnection_Complete, code=0x5)
 bind_layers( HCI_Event_Hdr, HCI_Event_Encryption_Change, code=0x8)
