@@ -670,7 +670,7 @@ class HCI_LE_Meta_Connection_Update_Complete(Packet):
 class HCI_LE_Meta_Advertising_Report(Packet):
     name = "Advertising Report"
     fields_desc = [ ByteField("number", 0),
-                    ByteEnumField("event_type", 0, {0:"conn_und", 4:"scan_rsp"}),
+                    ByteEnumField("type", 0, {0:"conn_und", 4:"scan_rsp"}),
                     ByteEnumField("atype", 0, {0:"public", 1:"random"}),
                     LEMACField("addr", None),
                     FieldLenField("len", None, length_of="data", fmt="B"),
