@@ -602,7 +602,7 @@ class HCI_Cmd_LE_Long_Term_Key_Request_Reply(Packet):
     fields_desc = [ LEShortField("handle", 0),
                     StrFixedLenField("ltk", b'\x00' * 16, 16), ]
     
-class HCI_LE_Read_Advertising_Channel_Tx_Power(Packet):
+class HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power(Packet):
     name = "HCI LE Read Advertising_Channel Tx Power"
     fields_desc = [ ByteField("status:", 0),
                     SignedByteField("transmit_power_level", 0), ]
