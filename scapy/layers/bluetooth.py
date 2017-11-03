@@ -749,7 +749,7 @@ bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Complete, event=1)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Advertising_Report, event=2)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Update_Complete, event=3)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Long_Term_Key_Request, event=5)
-bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_Advertising_Channel_Tx_Power, event=7)
+bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_Advertising_Channel_Tx_Power, event=0x2007)
 
 bind_layers(EIR_Hdr, EIR_Flags, type=0x01)
 bind_layers(EIR_Hdr, EIR_IncompleteList16BitServiceUUIDs, type=0x02)
