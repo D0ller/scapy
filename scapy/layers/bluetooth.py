@@ -601,7 +601,12 @@ class HCI_Cmd_LE_Long_Term_Key_Request_Reply(Packet):
     name = "LE Long Term Key Request Reply"
     fields_desc = [ LEShortField("handle", 0),
                     StrFixedLenField("ltk", b'\x00' * 16, 16), ]
-
+    
+class HCI_LE_Read_Advertising_Channel_Tx_Power(Packet):
+    name = "HCI LE Read Advertising_Channel Tx Power"
+    fields_desc = [ ByteField("status:", 0),
+                    SignedByteField("transmit_power_level", 0), ]
+    
 class HCI_Event_Hdr(Packet):
     name = "HCI Event header"
     fields_desc = [ XByteField("code", 0),
@@ -717,7 +722,7 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Reply, opcode=0x2
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply, opcode=0x201b)
 
 #bind_layers( HCI_Command_Hdr, HCI_LE_Read_Local_Supported_Features, opcode=0x2003)
-#bind_layers( HCI_Command_Hdr, HCI_LE_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
+bind_layers( HCI_Command_Hdr, HCI_LE_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
 #bind_layers( HCI_Command_Hdr, HCI_LE_Read_White_List_Size, opcode=0x200f)
 #bind_layers( HCI_Command_Hdr, HCI_LE_Clear_White_List, opcode=0x2010)
 #bind_layers( HCI_Command_Hdr, HCI_LE_Add_Device_To_White_List, opcode=0x2011)
