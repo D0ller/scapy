@@ -632,8 +632,13 @@ class HCI_Event_Command_Complete(Packet):
 
 class HCI_Cmd_Complete_Read_BD_Addr(Packet):
     name = "Read BD Addr"
-    fields_desc = [ LEMACField("addr", None), ]
-
+    fields_desc = [ LEMACField("addr", None),]
+    
+class HCI_Cmd_Complete_Read_Advertising_Channel_Tx_Power(Packet):
+    name = "Read Advertising_Channel Tx Power"
+    fields_desc = [ ByteField("status:", 0),
+                    SignedByteField("transmit_power_level", 0), ]
+    
 
 class HCI_Event_Command_Status(Packet):
     name = "Command Status"
@@ -686,11 +691,6 @@ class HCI_LE_Meta_Long_Term_Key_Request(Packet):
     fields_desc = [ LEShortField("handle", 0),
                     StrFixedLenField("rand", None, 8),
                     XLEShortField("ediv", 0), ]
-    
-class HCI_LE_Meta_Read_Advertising_Channel_Tx_Power(Packet):
-    name = "Read Advertising_Channel Tx Power"
-    fields_desc = [ ByteField("status:", 0),
-                    SignedByteField("transmit_power_level", 0), ]
 
 
 bind_layers( HCI_Hdr,       HCI_Command_Hdr,    type=1)
@@ -744,12 +744,13 @@ bind_layers( HCI_Event_Hdr, HCI_Event_Number_Of_Completed_Packets, code=0x13)
 bind_layers( HCI_Event_Hdr, HCI_Event_LE_Meta, code=0x3e)
 
 bind_layers( HCI_Event_Command_Complete, HCI_Cmd_Complete_Read_BD_Addr, opcode=0x1009)
+bind_layers( HCI_Event_Command_Complete, HCI_Cmd_Complete_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
 
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Complete, event=1)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Advertising_Report, event=2)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Update_Complete, event=3)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Long_Term_Key_Request, event=5)
-bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_Advertising_Channel_Tx_Power, event=0x2007)
+
 
 bind_layers(EIR_Hdr, EIR_Flags, type=0x01)
 bind_layers(EIR_Hdr, EIR_IncompleteList16BitServiceUUIDs, type=0x02)
