@@ -603,15 +603,12 @@ class HCI_Cmd_LE_Long_Term_Key_Request_Reply(Packet):
                     StrFixedLenField("ltk", b'\x00' * 16, 16), ]
     
 class HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power(Packet):
-    name = "HCI LE Read Advertising_Channel Tx Power"
-    fields_desc = [ ByteField("status:", 0),
-                    SignedByteField("transmit_power_level", 0), ]
+    name = "Read Advertising_Channel Tx Power"
     
 class HCI_Event_Hdr(Packet):
     name = "HCI Event header"
     fields_desc = [ XByteField("code", 0),
                     ByteField("length", 0), ]
-
 
 class HCI_Event_Disconnection_Complete(Packet):
     name = "Disconnection Complete"
@@ -689,6 +686,11 @@ class HCI_LE_Meta_Long_Term_Key_Request(Packet):
     fields_desc = [ LEShortField("handle", 0),
                     StrFixedLenField("rand", None, 8),
                     XLEShortField("ediv", 0), ]
+    
+class HCI_LE_Meta_Read_Advertising_Channel_Tx_Power(Packet):
+    name = "Read Advertising_Channel Tx Power"
+    fields_desc = [ ByteField("status:", 0),
+                    SignedByteField("transmit_power_level", 0), ]
 
 
 bind_layers( HCI_Hdr,       HCI_Command_Hdr,    type=1)
@@ -747,6 +749,7 @@ bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Complete, event=1)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Advertising_Report, event=2)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Update_Complete, event=3)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Long_Term_Key_Request, event=5)
+bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_Advertising_Channel_Tx_Power, event=7)
 
 bind_layers(EIR_Hdr, EIR_Flags, type=0x01)
 bind_layers(EIR_Hdr, EIR_IncompleteList16BitServiceUUIDs, type=0x02)
