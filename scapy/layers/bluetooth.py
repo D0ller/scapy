@@ -648,7 +648,9 @@ class HCI_Event_Command_Status(Packet):
 
 class HCI_Event_Number_Of_Completed_Packets(Packet):
     name = "Number Of Completed Packets"
-    fields_desc = [ ByteField("number", 0) ]
+    fields_desc = [ ByteField("num_of_conn", 0),
+                    LEShortField("handle", 0),
+                    LEShortField("num_of_comp", 0),]
 
 class HCI_Event_LE_Meta(Packet):
     name = "LE Meta"
