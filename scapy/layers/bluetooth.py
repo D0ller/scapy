@@ -338,11 +338,11 @@ class SM_Pairing_Response(Packet):
 
 class SM_Confirm(Packet):
     name = "Pairing Confirm"
-    fields_desc = [ StrFixedLenField("confirm", b'\x00' * 16, 16) ]
+    fields_desc = [ XStrFixedLenField("confirm", b'\x00' * 16, 16) ]
 
 class SM_Random(Packet):
     name = "Pairing Random"
-    fields_desc = [ StrFixedLenField("random", b'\x00' * 16, 16) ]
+    fields_desc = [ XStrFixedLenField("random", b'\x00' * 16, 16) ]
 
 class SM_Failed(Packet):
     name = "Pairing Failed"
@@ -355,11 +355,11 @@ class SM_Encryption_Information(Packet):
 class SM_Master_Identification(Packet):
     name = "Master Identification"
     fields_desc = [ XLEShortField("ediv", 0),
-                    StrFixedLenField("rand", b'\x00' * 8, 8), ]
+                    XStrFixedLenField("rand", b'\x00' * 8, 8), ]
     
 class SM_Identity_Information(Packet):
     name = "Identity Information"
-    fields_desc = [ StrFixedLenField("irk", b'\x00' * 16, 16), ]
+    fields_desc = [ XStrFixedLenField("irk", b'\x00' * 16, 16), ]
 
 class SM_Identity_Address_Information(Packet):
     name = "Identity Address Information"
@@ -368,7 +368,7 @@ class SM_Identity_Address_Information(Packet):
     
 class SM_Signing_Information(Packet):
     name = "Signing Information"
-    fields_desc = [ StrFixedLenField("csrk", b'\x00' * 16, 16), ]
+    fields_desc = [ XStrFixedLenField("csrk", b'\x00' * 16, 16), ]
 
 
 class EIR_Hdr(Packet):
