@@ -65,7 +65,7 @@ class HCI_Hdr(Packet):
 
 class HCI_ACL_Hdr(Packet):
     name = "HCI ACL header"
-    fields_desc = [ ByteField("handle",0), # Actually, handle is 12 bits and flags is 4.
+    fields_desc = [ ByteField("handle",0), # Actually, handle is 12 bits and flags is 4.(over-8bit handle can raise struct error.)
                     ByteField("flags",0),  # I wait to write a LEBitField
                     LEShortField("len",None), ]
     def post_build(self, p, pay):
@@ -191,7 +191,7 @@ class L2CAP_Connection_Parameter_Update_Request(Packet):
     
 class L2CAP_Connection_Parameter_Update_Response(Packet):
     name = "L2CAP Connection Parameter Update Response"
-    fields_desc = [ LEShortField("move_result", 0), ]
+    fields_desc = [ LEShortField("move_result", 0x0000), ]
 
 
 class ATT_Hdr(Packet):
