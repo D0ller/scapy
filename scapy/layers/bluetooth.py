@@ -591,7 +591,7 @@ class HCI_Cmd_LE_Start_Encryption_Request(Packet):
     fields_desc = [ LEShortField("handle", 0),
                     StrFixedLenField("rand", None, 8),
                     XLEShortField("ediv", 0),
-                    StrFixedLenField("ltk", b'\x00' * 16, 16), ]
+                    XStrFixedLenField("ltk", b'\x00' * 16, 16), ]
 
 class HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply(Packet):
     name = "LE Long Term Key Request Negative Reply"
