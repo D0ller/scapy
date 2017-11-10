@@ -607,7 +607,7 @@ class HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power(Packet):
     
 class HCI_Cmd_LE_Set_Event_Mask(Packet):
     name = "LE Set Event Mask"
-    fields_desc = [ StrFixedLenField("mask", b"\x00\x00\x00\x00\x00\x00\x00\x1f", 8) ]
+    fields_desc = [ StrFixedLenField("mask", b"\x1f\x00\x00\x00\x00\x00\x00\x00", 8) ]
     
 class HCI_Event_Hdr(Packet):
     name = "HCI Event header"
