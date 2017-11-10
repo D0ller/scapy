@@ -504,6 +504,15 @@ class HCI_Cmd_Set_Event_Mask(Packet):
     name = "Set Event Mask"
     fields_desc = [ StrFixedLenField("mask", b"\xff\xff\xfb\xff\x07\xf8\xbf\x3d", 8) ]
 
+class HCI_Cmd_Read_Local_Supported_Commands(Packet):
+    name = "Read Local Supported Commands"
+
+class HCI_Cmd_Read_Local_Supported_Features(Packet):
+    name = "Read Local Supported Features"
+    
+class HCI_Cmd_Read_Buffer_Size(Packet):
+    name = "Read Buffer Size"
+    
 class HCI_Cmd_Read_BD_Addr(Packet):
     name = "Read BD Addr"
 
@@ -594,7 +603,7 @@ class HCI_Cmd_LE_Start_Encryption_Request(Packet):
                     XStrFixedLenField("ltk", b'\x00' * 16, 16), ]
 
 class HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply(Packet):
-    name = "LE Long Term Key Request Negative Reply"
+    name = "LE Long Term Key Request Negative Reply0x3dbff807fffbffff"
     fields_desc = [ LEShortField("handle", 0), ]
 
 class HCI_Cmd_LE_Long_Term_Key_Request_Reply(Packet):
@@ -608,6 +617,10 @@ class HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power(Packet):
 class HCI_Cmd_LE_Set_Event_Mask(Packet):
     name = "LE Set Event Mask"
     fields_desc = [ StrFixedLenField("mask", b"\x1f\x00\x00\x00\x00\x00\x00\x00", 8) ]
+    
+class HCI_Cmd_LE_Read_Local_Supported_Features(Packet):
+    name = "LE Read Local Supported Features"
+    
     
 class HCI_Event_Hdr(Packet):
     name = "HCI Event header"
@@ -709,6 +722,11 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_Set_Event_Mask, opcode=0x0c01)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_Set_Event_Filter, opcode=0x0c05)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_Connect_Accept_Timeout, opcode=0x0c16)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Host_Supported, opcode=0x0c6d)
+
+bind_layers( HCI_Command_Hdr, HCI_Cmd_Read_Local_Supported_Commands, opcode=0x1002)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_Read_Local_Supported_Features, opcode=0x1003)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_Read_Buffer_Size, opcode=0x1005)
+
 bind_layers( HCI_Command_Hdr, HCI_Cmd_Read_BD_Addr, opcode=0x1009)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Buffer_Size, opcode=0x2002)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Random_Address, opcode=0x2005)
@@ -730,7 +748,7 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Reply, opcode=0x2
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply, opcode=0x201b)
 
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Event_Mask, opcode=0x2001)
-#bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Local_Supported_Features, opcode=0x2003)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Local_Supported_Features, opcode=0x2003)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_White_List_Size, opcode=0x200f)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Clear_White_List, opcode=0x2010)
