@@ -605,6 +605,10 @@ class HCI_Cmd_LE_Long_Term_Key_Request_Reply(Packet):
 class HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power(Packet):
     name = "Read Advertising_Channel Tx Power"
     
+class HCI_Cmd_LE_Set_Event_Mask(Packet):
+    name = "LE Set Event Mask"
+    fields_desc = [ StrFixedLenField("mask", b"\x00\x00\x00\x00\x00\x00\x00\x1f", 8) ]
+    
 class HCI_Event_Hdr(Packet):
     name = "HCI Event header"
     fields_desc = [ XByteField("code", 0),
@@ -725,6 +729,7 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Start_Encryption_Request, opcode=0x2019
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Reply, opcode=0x201a)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply, opcode=0x201b)
 
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Event_Mask, opcode=0x2001)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Local_Supported_Features, opcode=0x2003)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_White_List_Size, opcode=0x200f)
