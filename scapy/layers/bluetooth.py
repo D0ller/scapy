@@ -658,7 +658,8 @@ class HCI_Cmd_Complete_Read_Advertising_Channel_Tx_Power(Packet):
 
 class HCI_Cmd_LE_Read_Remote_Used_Features(Packet):
     name = "Read Remote Used Features"
-
+    fields_desc = [ LEShortField("handle", 0), ]
+    
 class HCI_Event_Command_Status(Packet):
     name = "Command Status"
     fields_desc = [ ByteEnumField("status", 0, {0:"pending"}),
