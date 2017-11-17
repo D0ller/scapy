@@ -707,6 +707,11 @@ class HCI_LE_Meta_Advertising_Report(Packet):
                                     length_from=lambda pkt:pkt.len),
                     SignedByteField("rssi", 0)]
 
+class HCI_LE_Meta_Read_User_Features_Complete(Packet):
+    name = "Read User Features Complete"
+    fields_desc = [ ByteEnumField("status", 0, {0:"success"}),
+                    LEShortField("handle", 0),
+                    StrFixedLenField("le_features", b"\x01\x00\x00\x00\x00\x00\x00\x00", 8), ]
 
 class HCI_LE_Meta_Long_Term_Key_Request(Packet):
     name = "Long Term Key Request"
@@ -777,6 +782,7 @@ bind_layers( HCI_Event_Command_Complete, HCI_Cmd_Complete_Read_Advertising_Chann
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Complete, event=1)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Advertising_Report, event=2)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Update_Complete, event=3)
+bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_User_Features_Complete event=4)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Long_Term_Key_Request, event=5)
 
 
