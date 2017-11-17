@@ -782,7 +782,7 @@ bind_layers( HCI_Event_Command_Complete, HCI_Cmd_Complete_Read_Advertising_Chann
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Complete, event=1)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Advertising_Report, event=2)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Update_Complete, event=3)
-bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_User_Features_Complete event=4)
+bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_User_Features_Complete, event=4)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Long_Term_Key_Request, event=5)
 
 
