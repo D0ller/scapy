@@ -655,7 +655,9 @@ class HCI_Cmd_Complete_Read_Advertising_Channel_Tx_Power(Packet):
     name = "Read Advertising_Channel Tx Power"
     fields_desc = [ ByteField("status:", 0),
                     SignedByteField("transmit_power_level", 0), ]
-    
+
+class HCI_Cmd_LE_Read_Remote_Used_Features(Packet):
+    name = "Read Remote Used Features"
 
 class HCI_Event_Command_Status(Packet):
     name = "Command Status"
@@ -756,7 +758,7 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power, opco
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Remove_Device_From_White_List, opcode=0x2012)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Host_Channel_Classification, opcode=0x2014)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Channel_Map, opcode=0x2015)
-#bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Remote_Used_Features, opcode=0x2016)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Remote_Used_Features, opcode=0x2016)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Encrypt, opcode=0x2017)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Rand, opcode=0x2018)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Supported_States, opcode=0x201c)
