@@ -655,7 +655,24 @@ class HCI_Cmd_Complete_Read_Advertising_Channel_Tx_Power(Packet):
     name = "Read Advertising_Channel Tx Power"
     fields_desc = [ ByteField("status:", 0),
                     SignedByteField("transmit_power_level", 0), ]
+    
+class HCI_Cmd_LE_Read_White_List_Size(Packet):
+    name = "LE Read White List Size"
 
+class HCI_Cmd_LE_Clear_White_List(Packet):
+    name = "LE Clear White List"
+    
+class HCI_Cmd_LE_Add_Device_To_White_List(Packet):
+    name = "LE Add Device To White List"
+    fields_desc = [ ByteEnumField("addres_type", 0, {0:"public",1:"random"}),
+                    LEMACField("addr", None), ]
+  
+class HCI_Cmd_LE_Remove_Device_From_White_List(Packet):
+    name = "LE Remove Device From White List"
+    fields_desc = [ ByteEnumField("addres_type", 0, {0:"public",1:"random"}),
+                    LEMACField("addr", None), ]
+
+    
 class HCI_Cmd_LE_Read_Remote_Used_Features(Packet):
     name = "Read Remote Used Features"
     fields_desc = [ LEShortField("handle", 0), ]
@@ -719,6 +736,10 @@ class HCI_LE_Meta_Long_Term_Key_Request(Packet):
                     StrFixedLenField("rand", None, 8),
                     XLEShortField("ediv", 0), ]
 
+class HCI_LE_Meta_Read_White_List_Size(Packet):
+    name = "Read While List Size"
+    fields_desc = [ ByteEnumField("status", 0, {0:"success"}),
+                    ByteField("while_list_size", 0),]
 
 bind_layers( HCI_Hdr,       HCI_Command_Hdr,    type=1)
 bind_layers( HCI_Hdr,       HCI_ACL_Hdr,        type=2)
@@ -758,10 +779,10 @@ bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Long_Term_Key_Request_Negative_Reply, o
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Event_Mask, opcode=0x2001)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Local_Supported_Features, opcode=0x2003)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Advertising_Channel_Tx_Power, opcode=0x2007)
-#bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_White_List_Size, opcode=0x200f)
-#bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Clear_White_List, opcode=0x2010)
-#bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Add_Device_To_White_List, opcode=0x2011)
-#bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Remove_Device_From_White_List, opcode=0x2012)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_White_List_Size, opcode=0x200f)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Clear_White_List, opcode=0x2010)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Add_Device_To_White_List, opcode=0x2011)
+bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Remove_Device_From_White_List, opcode=0x2012)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Set_Host_Channel_Classification, opcode=0x2014)
 #bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Channel_Map, opcode=0x2015)
 bind_layers( HCI_Command_Hdr, HCI_Cmd_LE_Read_Remote_Used_Features, opcode=0x2016)
@@ -784,6 +805,8 @@ bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Advertising_Report, event=2)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Connection_Update_Complete, event=3)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_User_Features_Complete, event=4)
 bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Long_Term_Key_Request, event=5)
+bind_layers( HCI_Event_LE_Meta, HCI_LE_Meta_Read_White_List_Size, event=0x0f)
+
 
 
 bind_layers(EIR_Hdr, EIR_Flags, type=0x01)
