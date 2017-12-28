@@ -12,6 +12,143 @@ from scapy.fields import *
 from scapy.layers.netbios import NBTSession
 
 
+
+class SMB2_Sync_Header(Packet):
+    name = "SMB2 Sync Header"
+    fields_desc = [StrFixedLenField("protocol_id",b"\xfeSMB",4),
+                   LEShortField("structure_size",64),
+                   LEShortField("credit_charge",0),
+                   LEIntField("status",4),
+                   LEShortEnumField("command",0x00,
+                    {0x00:"NEGOTIATE",
+                     0x01:"SESSION_SETUP",
+                     0x02:"SESSION_LOGOFF",
+                     0x03:"TREE_CONNECT",
+                     0x04:"TREE_DISCONNECT",
+                     0x05:"CREATE",
+                     0x06:"CLOSE",
+                     0x07:"FLUSH",
+                     0x08:"READ",
+                     0x09:"WRITIE",
+                     0x0a:"LOCK",
+                     0x0b:"IOCTL",
+                     0x0c:"CANCEL",
+                     0x0d:"ECHO",
+                     0x0e:"QUERY_DIRECTORY",# "FIND" in wireshark
+                     0x0f:"CHANGE_NOTIFY",
+                     0x10:"QUERY_INFO",
+                     0x11:"SET_INFO",
+                     0x12:"OPLOCK_BREAK"}
+                     ),
+                   LEShortField("credit",1),
+                   FlagsField("flags",0x00,8,
+                    ["RESPONSE",
+                     "ASYNC",
+                     "CHAINED",
+                     "SIGINING",
+                     "PRIORITY+1",
+                     "PRIORITY+2",
+                     "PRIORITY+4",
+                     "UNDEFINED"]),
+                   LEShortField("undefined flags",0x00),
+                   FlagsField("operation_flags",0x00,8,
+                    ["DFS",
+                     "REPLAY",
+                     "UNDEFINED",
+                     "UNDEFINED",
+                     "UNDEFINED",
+                     "UNDEFINED",
+                     "UNDEFINED",
+                     "UNDEFINED"]),
+                   LEIntField("next_command",0),
+                   LELongField("message_id",0),
+                   LEIntField("process_id",0), # "Reserved" [MS-SMB2].pdf v54.0
+                   LEIntField("tree_id",0),
+                   LELongField("session_id",0),
+                   XStrFixedLenField("signature",b"\x00"*16,16),]
+
+class SMB2_Negotiate_Context(Packet):
+    name = "SMB2 Negotiate Context"
+    fields_desc = [LEShortEnumField("context_type",0x0001,
+                   {0x01:"PREAUTH_INTEGRITY_CAPABILITIES",
+                     0x02:"ENCRYPTION_CAPABILITIES"}),
+                   LEFieldLenField("data_len",None,length_of="data"),
+                   LEIntField("reserved",0x00),
+                   StrLenField("data", "", length_from=lambda x:x.data_len)]
+
+class SMB2_GSS_API(Packet):
+    name = "SMB2 GSS API"
+    fields_desc = [StrField("data",None)]
+
+class SMB2_Negotiate_Request(Packet):
+    name = "SMB2 Negotiate Request"
+    fields_desc = [LEShortField("structure_size",36),
+                   LEFieldLenField("dialect_count",None,count_of="dialect_list"),
+                   FlagsField("security_mode",0x00,2,
+                    ["Sigining enabled",
+                     "Sigining required"]),
+                   LEShortField("reserved",0x00),
+                   FlagsField("capabilities",0x00,8,
+                    ["DFS",
+                     "LEASING",
+                     "LARGE MTU",
+                     "MULTI CHANNEL",
+                     "PERSISTENT HANDLES",
+                     "DIRECTORY LEASING",
+                     "ENCRYPTION",
+                     "UNDEFINED"]),
+                   StrField("client_guid",b"\x00"*16,"016x"),
+                   LEIntField("context_offset",0x00),
+                   LEFieldLenField("context_count",None,count_of="context_list"),
+                   FieldListField("dialect_list",[0x0202],LEShortEnumField("dialect",0x0202,
+                    {0x0202:"SMB 2.0.2",
+                     0x0210:"SMB 2.1.0",
+                     0x0300:"SMB 3.0",
+                     0x0302:"SMB 3.0.2",
+                     0x0311:"SMB 3.1.1",
+                     0x02ff:"SMB 2.???"}),
+                   count_from=lambda pkt:pkt.dialect_count),
+                   PacketListField("context",None,SMB2_Negotiate_Context,count_from=lambda x:x.context_count)]
+                   
+"""
+class SMB2_Negotiate_Response(Packet):
+    name = "SMB2 Negotiate Response"
+    fields_desc = [LEShortField("structure_size",0x00),
+                   FlagsField("security_mode",0x00,2,
+                   ["Sigining enabled",
+                    "Sigining required"]),
+                   LEShortEnumField("dialect_revision",0x0202,
+                   {0x0202:"SMB 2.0.2",
+                    0x0210:"SMB 2.1.0",
+                    0x0300:"SMB 3.0",
+                    0x0302:"SMB 3.0.2",
+                    0x0311:"SMB 3.1.1",
+                    0x02ff:"SMB 2.???"}),
+                   LEFieldLenField("context_count",None,count_of="context_list"),
+                   StrField("server_guid",b"\x00"*16,"016x"),
+                   FlagsField("capabilities",0x00,8,
+                    ["DFS",
+                     "LEASING",
+                     "LARGE MTU",
+                     "MULTI CHANNEL",
+                     "PERSISTENT HANDLES",
+                     "DIRECTORY LEASING",
+                     "ENCRYPTION",
+                     "UNDEFINED"]),
+                   LEIntField("max_transaction_size",0x00),
+                   LEIntField("max_read_size",0x00),
+                   LEIntField("max_write_size",0x00),
+                   LELongField("system_time",0x00),
+                   LELongField("server_start_time",0x00),
+                   LEShortField("security_buffer_offset",0x00),
+                   LEShortField("security_buffer_len",None),
+                   LEIntField("context_offset",0x00),
+                   PacketLenField("buffer",None,SMB2_GSS_API,length_from=lambda x:x.security_buffer_len),
+                   PadField("padding",8),
+                   PacketListField("context",None,SMB2_Negotiate_Context,count_from=lambda x:x.context_count)]
+"""
+
+
 # SMB NetLogon Response Header
 class SMBNetlogon_Protocol_Response_Header(Packet):
     name="SMBNetlogon Protocol Response Header"
@@ -110,9 +247,9 @@ class SMBNetlogon_Protocol_Response_Tail_LM20(Packet):
                    StrNullField("ServerName","WIN"),
                    LEShortField("LM20Token", 0xffff)]
 
-# SMBNegociate Protocol Request Header
-class SMBNegociate_Protocol_Request_Header(Packet):
-    name="SMBNegociate Protocol Request Header"
+# SMBNegotiate Protocol Request Header
+class SMBNegotiate_Protocol_Request_Header(Packet):
+    name="SMBNegotiate Protocol Request Header"
     fields_desc = [StrFixedLenField("Start",b"\xffSMB",4),
                    ByteEnumField("Command",0x72,{0x72:"SMB_COM_NEGOTIATE"}),
                    ByteField("Error_Class",0),
@@ -130,15 +267,15 @@ class SMBNegociate_Protocol_Request_Header(Packet):
                    ByteField("WordCount",0),
                    LEShortField("ByteCount",12)]
 
-# SMB Negociate Protocol Request Tail
-class SMBNegociate_Protocol_Request_Tail(Packet):
-    name="SMB Negociate Protocol Request Tail"
+# SMB Negotiate Protocol Request Tail
+class SMBNegotiate_Protocol_Request_Tail(Packet):
+    name="SMB Negotiate Protocol Request Tail"
     fields_desc=[ByteField("BufferFormat",0x02),
                  StrNullField("BufferData","NT LM 0.12")]
 
-# SMBNegociate Protocol Response Advanced Security
-class SMBNegociate_Protocol_Response_Advanced_Security(Packet):
-    name="SMBNegociate Protocol Response Advanced Security"
+# SMBNegotiate Protocol Response Advanced Security
+class SMBNegotiate_Protocol_Response_Advanced_Security(Packet):
+    name="SMBNegotiate Protocol Response Advanced Security"
     fields_desc = [StrFixedLenField("Start",b"\xffSMB",4),
                    ByteEnumField("Command",0x72,{0x72:"SMB_COM_NEGOTIATE"}),
                    ByteField("Error_Class",0),
@@ -176,10 +313,10 @@ class SMBNegociate_Protocol_Response_Advanced_Security(Packet):
                    BitField("GUID",0,128),
                    StrLenField("SecurityBlob", "", length_from=lambda x:x.ByteCount+16)]
 
-# SMBNegociate Protocol Response No Security
+# SMBNegotiate Protocol Response No Security
 # When using no security, with EncryptionKeyLength=8, you must have an EncryptionKey before the DomainName
-class SMBNegociate_Protocol_Response_No_Security(Packet):
-    name="SMBNegociate Protocol Response No Security"
+class SMBNegotiate_Protocol_Response_No_Security(Packet):
+    name="SMBNegotiate Protocol Response No Security"
     fields_desc = [StrFixedLenField("Start",b"\xffSMB",4),
                    ByteEnumField("Command",0x72,{0x72:"SMB_COM_NEGOTIATE"}),
                    ByteField("Error_Class",0),
@@ -218,9 +355,9 @@ class SMBNegociate_Protocol_Response_No_Security(Packet):
                    StrNullField("DomainName","WORKGROUP"),
                    StrNullField("ServerName","RMFF1")]
     
-# SMBNegociate Protocol Response No Security No Key
-class SMBNegociate_Protocol_Response_No_Security_No_Key(Packet):
-    namez="SMBNegociate Protocol Response No Security No Key"
+# SMBNegotiate Protocol Response No Security No Key
+class SMBNegotiate_Protocol_Response_No_Security_No_Key(Packet):
+    namez="SMBNegotiate Protocol Response No Security No Key"
     fields_desc = [StrFixedLenField("Start",b"\xffSMB",4),
                    ByteEnumField("Command",0x72,{0x72:"SMB_COM_NEGOTIATE"}),
                    ByteField("Error_Class",0),
@@ -344,11 +481,15 @@ class SMBSession_Setup_AndX_Response(Packet):
                  StrNullField("Service","IPC"),
                  StrNullField("NativeFileSystem","")]
 
-bind_layers( NBTSession,                           SMBNegociate_Protocol_Request_Header, )
-bind_layers( NBTSession,    SMBNegociate_Protocol_Response_Advanced_Security,  ExtendedSecurity=1)
-bind_layers( NBTSession,    SMBNegociate_Protocol_Response_No_Security,        ExtendedSecurity=0, EncryptionKeyLength=8)
-bind_layers( NBTSession,    SMBNegociate_Protocol_Response_No_Security_No_Key, ExtendedSecurity=0, EncryptionKeyLength=0)
+bind_layers( NBTSession, SMB2_Sync_Header, )
+bind_layers( SMB2_Sync_Header, SMB2_Negotiate_Request, command=0x00)
+#bind_layers( SMB2_Sync_Header,SMB2_Negotiate_Response,)
+
+bind_layers( NBTSession,                           SMBNegotiate_Protocol_Request_Header, )
+bind_layers( NBTSession,    SMBNegotiate_Protocol_Response_Advanced_Security,  ExtendedSecurity=1)
+bind_layers( NBTSession,    SMBNegotiate_Protocol_Response_No_Security,        ExtendedSecurity=0, EncryptionKeyLength=8)
+bind_layers( NBTSession,    SMBNegotiate_Protocol_Response_No_Security_No_Key, ExtendedSecurity=0, EncryptionKeyLength=0)
 bind_layers( NBTSession,    SMBSession_Setup_AndX_Request, )
 bind_layers( NBTSession,    SMBSession_Setup_AndX_Response, )
-bind_layers( SMBNegociate_Protocol_Request_Header, SMBNegociate_Protocol_Request_Tail, )
-bind_layers( SMBNegociate_Protocol_Request_Tail,   SMBNegociate_Protocol_Request_Tail, )
+bind_layers( SMBNegotiate_Protocol_Request_Header, SMBNegotiate_Protocol_Request_Tail, )
+bind_layers( SMBNegotiate_Protocol_Request_Tail,   SMBNegotiate_Protocol_Request_Tail, )
